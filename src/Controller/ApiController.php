@@ -8,13 +8,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+
 #[Route('/api', name: 'api_')]
 class ApiController extends AbstractController
 {
-    #[Route('/info/{id}', name: 'info', methods: ['GET'])]
-    public function info(int $id, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/purchase/{id}', name: 'info', methods: ['GET'])]
+    public function info(?Purchase $purchase): JsonResponse
     {
-        $purchase = $entityManager->getRepository(Purchase::class)->find($id);
         if (!$purchase) {
             return $this->json(['error' => 'Not found purchase'], 404);
         }
@@ -39,7 +39,14 @@ class ApiController extends AbstractController
     #[Route('/purchase', name: 'purchase', methods: ['POST'])]
     public function createPurchase(EntityManagerInterface $entityManager): JsonResponse
     {
+        $purchaseItems = [
+            ['product_id' => 1, 'quantity' => 1],
+        ];
+
+        foreach ($purchaseItems as $purchaseItem) {}
+
         $products = $entityManager->getRepository(Product::class)->findAll();
+
 
         
 
