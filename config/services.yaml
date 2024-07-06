@@ -22,3 +22,16 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\Calculator\PriceCalculator:
+        tags: ['price_calculator']
+
+    App\Service\Calculator\VatCalculator:
+        tags: ['vat_calculator']
+
+    App\Service\Collector\PriceCalculatorCollector:
+        arguments:
+            $priceCalculator: !tagged price_calculator
+
+    App\Service\Collector\VatCalculatorCollector:
+        arguments:
+            $vatCalculator: !tagged vat_calculator

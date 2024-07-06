@@ -2,12 +2,45 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use App\Dto\PurchaseDetailsResponse;
+use App\Dto\PurchaseRequest;
+use App\Dto\PurchaseResponse;
 use App\Repository\PurchaseRepository;
+use App\State\PurchaseDetailsProvider;
+use App\State\PurchaseProcessor;
+use App\State\PurchaseProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PurchaseRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(
+            uriTemplate: 'v1/purchase/{id}',
+            formats: ['json'],
+            output: PurchaseResponse::class,
+            provider: PurchaseProvider::class,
+        ),
+        new Get(
+            uriTemplate: 'v1/purchase/{id}/details',
+            formats: ['json'],
+            output: PurchaseDetailsResponse::class,
+            provider: PurchaseDetailsProvider::class,
+        ),
+        new Post(
+            uriTemplate: 'v1/purchase',
+            formats: ['json'],
+            status: 200,
+            input: PurchaseRequest::class,
+            output: PurchaseResponse::class,
+            processor: PurchaseProcessor::class,
+        ),
+    ], formats: ['json', 'jsonld']
+)]
 class Purchase
 {
     #[ORM\Id]

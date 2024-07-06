@@ -19,14 +19,14 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
-
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
     #[ORM\Column]
     private ?int $quantity = null;
+
+    #[ORM\Version, ORM\Column(type: 'integer')]
+    private int $version;
 
     /**
      * @var Collection<int, PurchaseItem>
@@ -37,6 +37,11 @@ class Product
     public function __construct()
     {
         $this->purchaseItems = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -52,18 +57,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
 
         return $this;
     }
