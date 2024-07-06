@@ -9,12 +9,10 @@ use App\Entity\Purchase;
 use App\Repository\PurchaseRepository;
 use App\Service\PurchaseService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class PurchaseProvider implements ProviderInterface
 {
     public function __construct(
-        private readonly SerializerInterface $serializer,
         private readonly PurchaseRepository $purchaseRepository,
         private readonly PurchaseService $purchaseService,
     )
@@ -25,7 +23,7 @@ class PurchaseProvider implements ProviderInterface
     {
         $purchase = $this->purchaseRepository->find($uriVariables['id']);
 
-        /** @var Purchase $book */
+        /** @var Purchase $purchase */
         if (!$purchase) {
             throw new NotFoundHttpException('Not found purchase');
         }
