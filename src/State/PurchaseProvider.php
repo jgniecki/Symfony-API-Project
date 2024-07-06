@@ -27,7 +27,7 @@ class PurchaseProvider implements ProviderInterface
 
         /** @var Purchase $book */
         if (!$purchase) {
-            throw new NotFoundHttpException('Purchase not found');
+            throw new NotFoundHttpException('Not found purchase');
         }
 
         return $this->purchaseService->info($purchase);

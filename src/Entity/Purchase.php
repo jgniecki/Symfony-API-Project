@@ -39,7 +39,7 @@ use Doctrine\ORM\Mapping as ORM;
             output: PurchaseResponse::class,
             processor: PurchaseProcessor::class,
         ),
-    ], formats: ['json', 'jsonld']
+    ], formats: ['json']
 )]
 class Purchase
 {

@@ -9,6 +9,7 @@ use App\Dto\PurchaseResponse;
 use App\Entity\Purchase;
 use App\Service\PurchaseService;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PurchaseProcessor implements ProcessorInterface
 {
@@ -27,7 +28,7 @@ class PurchaseProcessor implements ProcessorInterface
         $purchase = $this->purchaseService->create($data);
 
         if (!$purchase) {
-            throw new Exception("Bad request", 400); //todo
+            throw new NotFoundHttpException("Bad request");
         }
 
         return $this->purchaseService->info($purchase);
