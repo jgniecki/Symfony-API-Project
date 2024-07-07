@@ -17,8 +17,7 @@ class PurchaseDetailsResponseDto
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('integer')]
-        public readonly int $id,
-
+        public readonly int   $id,
         #[Assert\Type('array')]
         #[Assert\Count(['min' => 1])]
         #[Assert\All([
@@ -60,7 +59,6 @@ class PurchaseDetailsResponseDto
             ]
         )]
         public readonly array $items,
-
         #[Assert\NotBlank]
         #[Assert\Valid]
         #[Assert\Collection(

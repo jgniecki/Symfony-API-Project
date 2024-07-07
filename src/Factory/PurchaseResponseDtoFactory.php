@@ -18,7 +18,7 @@ class PurchaseResponseDtoFactory
     {
         return new PurchaseResponseDto(
             id: $purchase->getId(),
-            items: array_map(function($item) {
+            items: array_map(function ($item) {
                 return [
                     'productId' => $item->getProduct()->getId(),
                     'quantity' => $item->getQuantity(),

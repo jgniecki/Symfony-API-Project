@@ -16,10 +16,6 @@ interface PriceCalculatorInterface
     /**
      * Drugi parametr przez charakterystyke zadania jest nie potrzebny aczkowliek mógłby zostać wykorzystany np.
      * do obliczenia ceny w wypadku promocji
-     *
-     * @param float $price
-     * @param PurchaseItem $purchaseItem
-     * @return float
      */
     public function calculate(float $price, PurchaseItem $purchaseItem): float;
 }

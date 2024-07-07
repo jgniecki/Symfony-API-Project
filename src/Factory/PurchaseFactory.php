@@ -13,8 +13,10 @@ use App\Dto\PurchaseRequestDto;
 use App\Entity\Product;
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
+use DateTimeImmutable;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class PurchaseFactory
 {
@@ -25,7 +27,7 @@ class PurchaseFactory
     public function create(PurchaseRequestDto $dto): ?Purchase
     {
         $purchase = new Purchase();
-        $purchase->setCreatedAt(new \DateTimeImmutable());
+        $purchase->setCreatedAt(new DateTimeImmutable());
         $purchase->setCustomerEmail($dto->email);
         $purchase->setCustomerName($dto->name);
 
@@ -37,12 +39,12 @@ class PurchaseFactory
             foreach ($dto->items as $item) {
                 $product = $this->entityManager->getRepository(Product::class)->find($item['productId'], LockMode::OPTIMISTIC);
                 if (!$product) {
-                    throw new \Exception('Product not found');
+                    throw new Exception('Product not found');
                 }
 
                 $quantity = $item['quantity'];
                 if ($product->getQuantity() < $quantity) {
-                    throw new \Exception('Not enough product quantity available.');
+                    throw new Exception('Not enough product quantity available.');
                 }
 
                 $purchaseItem = new PurchaseItem();
@@ -58,7 +60,7 @@ class PurchaseFactory
             $this->entityManager->flush();
             $this->entityManager->commit();
             return $purchase;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->entityManager->rollback();
             return null;
         }

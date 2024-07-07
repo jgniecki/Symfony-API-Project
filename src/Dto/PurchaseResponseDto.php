@@ -17,8 +17,7 @@ class PurchaseResponseDto
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('integer')]
-        public readonly int $id,
-
+        public readonly int   $id,
         #[Assert\Type('array')]
         #[Assert\Count(['min' => 1])]
         #[Assert\Valid]
@@ -38,7 +37,8 @@ class PurchaseResponseDto
                         new Assert\NotBlank(),
                         new Assert\Type('string'),
                     ],
-            ]),
+                ]
+            ),
         ])]
         #[ApiProperty(
             openapiContext: [

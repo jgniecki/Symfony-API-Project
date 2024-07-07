@@ -12,10 +12,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PurchaseProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly PurchaseFactory $purchaseFactory,
+        private readonly PurchaseFactory            $purchaseFactory,
         private readonly PurchaseResponseDtoFactory $purchaseResponseDtoFactory,
-    )
-    {
+    ) {
     }
 
 

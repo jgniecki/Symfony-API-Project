@@ -12,10 +12,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PurchaseDetailsProvider implements ProviderInterface
 {
     public function __construct(
-        private readonly PurchaseRepository $purchaseRepository,
+        private readonly PurchaseRepository                $purchaseRepository,
         private readonly PurchaseDetailsResponseDtoFactory $purchaseDetailsResponseDtoFactory,
-    )
-    {
+    ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): PurchaseDetailsResponseDto

@@ -15,7 +15,7 @@ use App\Service\Calculator\VatCalculatorInterface;
 class VatCalculatorCollector
 {
     /**
-     * @var \App\Service\\App\Service\Calculator\VatCalculatorInterface[]
+     * @var VatCalculatorInterface[]
      */
     private array $vatCalculators;
 
@@ -35,7 +35,7 @@ class VatCalculatorCollector
     public function calculate(float $price, PurchaseItem $purchaseItem): float
     {
         foreach ($this->vatCalculators as $vatCalculator) {
-             $price = $vatCalculator->calculate($price, $purchaseItem);
+            $price = $vatCalculator->calculate($price, $purchaseItem);
         }
 
         return $price;

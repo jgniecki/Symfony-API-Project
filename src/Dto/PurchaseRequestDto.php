@@ -18,11 +18,9 @@ class PurchaseRequestDto
         #[Assert\NotBlank]
         #[Assert\Type('string')]
         public readonly string $name,
-
         #[Assert\NotBlank]
         #[Assert\Email]
         public readonly string $email,
-
         #[Assert\Type('array')]
         #[Assert\Count(['min' => 1])]
         #[Assert\Valid]
@@ -57,7 +55,7 @@ class PurchaseRequestDto
                 ],
             ]
         )]
-        public readonly array $items,
+        public readonly array  $items,
     ) {
     }
 }

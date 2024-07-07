@@ -7,6 +7,7 @@ use App\Entity\Purchase;
 use App\Factory\PurchaseDetailsResponseDtoFactory;
 use App\Factory\PurchaseFactory;
 use App\Factory\PurchaseResponseDtoFactory;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,13 +43,12 @@ class ApiPurchaseController extends AbstractController
 
     #[Route('', name: 'create', methods: ['POST'])]
     public function createPurchase(
-        Request $request,
-        SerializerInterface $serializer,
-        ValidatorInterface $validator,
-        PurchaseFactory $purchaseFactory,
+        Request                    $request,
+        SerializerInterface        $serializer,
+        ValidatorInterface         $validator,
+        PurchaseFactory            $purchaseFactory,
         PurchaseResponseDtoFactory $purchaseResponseDtoFactory
-    ): Response
-    {
+    ): Response {
         if ($request->getContentTypeFormat() != "json") {
             return $this->json(['error' => 'Unsupported media type'], 415);
         }
@@ -57,7 +57,7 @@ class ApiPurchaseController extends AbstractController
 
         try {
             $dto = $serializer->denormalize($payload, PurchaseRequestDto::class);
-        } catch (\Exception) {
+        } catch (Exception) {
             return $this->json(['error' => 'Bad request'], 400);
         }
 

@@ -12,6 +12,7 @@ use App\Repository\PurchaseRepository;
 use App\State\PurchaseDetailsProvider;
 use App\State\PurchaseProcessor;
 use App\State\PurchaseProvider;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -39,7 +40,8 @@ use Doctrine\ORM\Mapping as ORM;
             output: PurchaseResponseDto::class,
             processor: PurchaseProcessor::class,
         ),
-    ], formats: ['json']
+    ],
+    formats: ['json']
 )]
 class Purchase
 {
@@ -61,7 +63,7 @@ class Purchase
     private Collection $purchaseItems;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
@@ -127,12 +129,12 @@ class Purchase
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 

@@ -30,16 +30,6 @@ class PurchaseCalculatorService
         return $totalQuantity;
     }
 
-    public function calculatePrice(PurchaseItem $purchaseItem): float
-    {
-        return $this->priceCalculatorCollector->calculate($purchaseItem);
-    }
-
-    public function calculateVat(float $price, PurchaseItem $purchaseItem): float
-    {
-        return $this->vatCalculatorCollector->calculate($price, $purchaseItem);
-    }
-
     public function calculateTotalVat(Purchase $purchase): float
     {
         $total = 0;
@@ -49,6 +39,16 @@ class PurchaseCalculatorService
         }
 
         return $total;
+    }
+
+    public function calculatePrice(PurchaseItem $purchaseItem): float
+    {
+        return $this->priceCalculatorCollector->calculate($purchaseItem);
+    }
+
+    public function calculateVat(float $price, PurchaseItem $purchaseItem): float
+    {
+        return $this->vatCalculatorCollector->calculate($price, $purchaseItem);
     }
 
     public function calculateTotalPrice(Purchase $purchase): float
