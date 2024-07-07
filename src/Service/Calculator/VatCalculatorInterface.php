@@ -7,15 +7,15 @@
  */
 
 
-namespace App\Service\Contract;
+namespace App\Service\Calculator;
 
 use App\Entity\PurchaseItem;
 
-interface PriceCalculatorInterface
+interface VatCalculatorInterface
 {
     /**
-     * Drugi parametr przez charakterystyke zadania jest nie potrzebny aczkowliek mógłby zostać wykorzystany np.
-     * do obliczenia ceny w wypadku promocji
+     * Drugi parametr przez charakterystyke zadania jest nie potrzebny z racji założenia, że każdy produkt ma
+     * stały VAT, jednakże zostawiłem furtkę która umożliwia na zastosowanie różnych VATów
      *
      * @param float $price
      * @param PurchaseItem $purchaseItem

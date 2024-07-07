@@ -5,9 +5,9 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
-use App\Dto\PurchaseDetailsResponse;
-use App\Dto\PurchaseRequest;
-use App\Dto\PurchaseResponse;
+use App\Dto\PurchaseDetailsResponseDto;
+use App\Dto\PurchaseRequestDto;
+use App\Dto\PurchaseResponseDto;
 use App\Repository\PurchaseRepository;
 use App\State\PurchaseDetailsProvider;
 use App\State\PurchaseProcessor;
@@ -22,21 +22,21 @@ use Doctrine\ORM\Mapping as ORM;
         new Get(
             uriTemplate: 'v1/purchase/{id}',
             formats: ['json'],
-            output: PurchaseResponse::class,
+            output: PurchaseResponseDto::class,
             provider: PurchaseProvider::class,
         ),
         new Get(
             uriTemplate: 'v1/purchase/{id}/details',
             formats: ['json'],
-            output: PurchaseDetailsResponse::class,
+            output: PurchaseDetailsResponseDto::class,
             provider: PurchaseDetailsProvider::class,
         ),
         new Post(
             uriTemplate: 'v1/purchase',
             formats: ['json'],
             status: 200,
-            input: PurchaseRequest::class,
-            output: PurchaseResponse::class,
+            input: PurchaseRequestDto::class,
+            output: PurchaseResponseDto::class,
             processor: PurchaseProcessor::class,
         ),
     ], formats: ['json']

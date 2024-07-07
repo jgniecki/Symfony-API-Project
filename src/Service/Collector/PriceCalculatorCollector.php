@@ -10,7 +10,7 @@
 namespace App\Service\Collector;
 
 use App\Entity\PurchaseItem;
-use App\Service\Contract\PriceCalculatorInterface;
+use App\Service\Calculator\PriceCalculatorInterface;
 
 class PriceCalculatorCollector
 {
@@ -18,7 +18,7 @@ class PriceCalculatorCollector
     /**
      * @var PriceCalculatorInterface[]
      */
-    private array $items;
+    private array $priceCalculators;
 
     public function __construct(iterable $priceCalculator)
     {
@@ -29,15 +29,15 @@ class PriceCalculatorCollector
 
     public function addCalculator(PriceCalculatorInterface $priceCalculator): void
     {
-        $this->items[] = $priceCalculator;
+        $this->priceCalculators[] = $priceCalculator;
     }
 
     public function calculate(PurchaseItem $purchaseItem): float
     {
         $price = (float)$purchaseItem->getUnitPrice() * $purchaseItem->getQuantity();
 
-        foreach ($this->items as $item) {
-            $price = $item->calculate($price, $purchaseItem);
+        foreach ($this->priceCalculators as $priceCalculator) {
+            $price = $priceCalculator->calculate($price, $purchaseItem);
         }
 
         return $price;

@@ -6,51 +6,23 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Service;
 
-use App\Dto\PurchaseDetailsResponse;
-use App\Dto\PurchaseRequest;
-use App\Dto\PurchaseResponse;
+namespace App\Factory;
+
+use App\Dto\PurchaseRequestDto;
 use App\Entity\Product;
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 
-class PurchaseService
+class PurchaseFactory
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 
-    public function info(Purchase $purchase): PurchaseResponse
-    {
-        return new PurchaseResponse(
-            id: $purchase->getId(),
-            items: array_map(function($item) {
-                return [
-                    'productId' => $item->getProduct()->getId(),
-                    'quantity' => $item->getQuantity(),
-                    'unitPrice' => $item->getUnitPrice(),
-                ];
-            }, $purchase->getPurchaseItems()->toArray())
-        );
-    }
-
-    public function details(Purchase $purchase, PurchaseCalculatorService $purchaseCalculatorService): PurchaseDetailsResponse
-    {
-        $dto = $this->info($purchase);
-
-        $total = [
-            'quantity' => $purchaseCalculatorService->calculateTotalQuantity($purchase),
-            'vat' => number_format($purchaseCalculatorService->calculateTotalVat($purchase), 2, '.', ''),
-            'price' => number_format($purchaseCalculatorService->calculateTotalPrice($purchase), 2, '.', ''),
-        ];
-
-        return new PurchaseDetailsResponse($dto->id, $dto->items, $total);
-    }
-
-    public function create(PurchaseRequest $dto): ?Purchase
+    public function create(PurchaseRequestDto $dto): ?Purchase
     {
         $purchase = new Purchase();
         $purchase->setCreatedAt(new \DateTimeImmutable());

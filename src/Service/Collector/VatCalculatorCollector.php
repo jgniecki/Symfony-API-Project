@@ -10,14 +10,14 @@
 namespace App\Service\Collector;
 
 use App\Entity\PurchaseItem;
-use App\Service\Contract\VatCalculatorInterface;
+use App\Service\Calculator\VatCalculatorInterface;
 
 class VatCalculatorCollector
 {
     /**
-     * @var VatCalculatorInterface[]
+     * @var \App\Service\\App\Service\Calculator\VatCalculatorInterface[]
      */
-    private array $items;
+    private array $vatCalculators;
 
     public function __construct(iterable $vatCalculator)
     {
@@ -29,13 +29,13 @@ class VatCalculatorCollector
 
     public function addCalculator(VatCalculatorInterface $vatCalculator): void
     {
-        $this->items[] = $vatCalculator;
+        $this->vatCalculators[] = $vatCalculator;
     }
 
     public function calculate(float $price, PurchaseItem $purchaseItem): float
     {
-        foreach ($this->items as $item) {
-             $price = $item->calculate($price, $purchaseItem);
+        foreach ($this->vatCalculators as $vatCalculator) {
+             $price = $vatCalculator->calculate($price, $purchaseItem);
         }
 
         return $price;

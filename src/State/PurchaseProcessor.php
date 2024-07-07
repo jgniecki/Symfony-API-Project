@@ -4,33 +4,29 @@ namespace App\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use App\Dto\PurchaseRequest;
-use App\Dto\PurchaseResponse;
-use App\Entity\Purchase;
-use App\Service\PurchaseService;
-use Exception;
+use App\Dto\PurchaseResponseDto;
+use App\Factory\PurchaseFactory;
+use App\Factory\PurchaseResponseDtoFactory;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PurchaseProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly PurchaseService $purchaseService,
+        private readonly PurchaseFactory $purchaseFactory,
+        private readonly PurchaseResponseDtoFactory $purchaseResponseDtoFactory,
     )
     {
     }
 
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): PurchaseResponse
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): PurchaseResponseDto
     {
-        /**
-         * @var PurchaseRequest $data
-         */
-        $purchase = $this->purchaseService->create($data);
+        $purchase = $this->purchaseFactory->create($data);
 
         if (!$purchase) {
             throw new NotFoundHttpException("Bad request");
         }
 
-        return $this->purchaseService->info($purchase);
+        return $this->purchaseResponseDtoFactory->create($purchase);
     }
 }

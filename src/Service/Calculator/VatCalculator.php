@@ -10,7 +10,6 @@
 namespace App\Service\Calculator;
 
 use App\Entity\PurchaseItem;
-use App\Service\Contract\VatCalculatorInterface;
 
 class VatCalculator implements VatCalculatorInterface
 {

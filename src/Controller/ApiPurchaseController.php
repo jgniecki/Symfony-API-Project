@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Dto\PurchaseRequest;
+use App\Dto\PurchaseRequestDto;
 use App\Entity\Purchase;
-use App\Service\PurchaseCalculatorService;
-use App\Service\PurchaseService;
+use App\Factory\PurchaseDetailsResponseDtoFactory;
+use App\Factory\PurchaseFactory;
+use App\Factory\PurchaseResponseDtoFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,27 +19,35 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ApiPurchaseController extends AbstractController
 {
     #[Route('/{id}', name: 'info', methods: ['GET'])]
-    public function infoPurchase(?Purchase $purchase, PurchaseService $purchaseService): JsonResponse
+    public function infoPurchase(?Purchase $purchase, PurchaseResponseDtoFactory $purchaseResponseDtoFactory): JsonResponse
     {
         if (!$purchase) {
             return $this->json(['error' => 'Not found purchase'], 404);
         }
 
-        return $this->json($purchaseService->info($purchase));
+        return $this->json($purchaseResponseDtoFactory->create($purchase));
     }
 
     #[Route('/{id}/details', name: 'details', methods: ['GET'])]
-    public function detailsPurchase(?Purchase $purchase, PurchaseService $purchaseService, PurchaseCalculatorService $purchaseCalculatorService): JsonResponse
+    public function detailsPurchase(?Purchase $purchase, PurchaseDetailsResponseDtoFactory $purchaseDetailsResponseDtoFactory): JsonResponse
     {
+        $purchaseDetailsResponseDtoFactory->create($purchase);
+
         if (!$purchase) {
             return $this->json(['error' => 'Not found purchase'], 404);
         }
 
-        return $this->json($purchaseService->details($purchase, $purchaseCalculatorService));
+        return $this->json($purchaseDetailsResponseDtoFactory->create($purchase));
     }
 
     #[Route('', name: 'create', methods: ['POST'])]
-    public function createPurchase(Request $request, PurchaseService $purchaseService, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    public function createPurchase(
+        Request $request,
+        SerializerInterface $serializer,
+        ValidatorInterface $validator,
+        PurchaseFactory $purchaseFactory,
+        PurchaseResponseDtoFactory $purchaseResponseDtoFactory
+    ): Response
     {
         if ($request->getContentTypeFormat() != "json") {
             return $this->json(['error' => 'Unsupported media type'], 415);
@@ -47,7 +56,7 @@ class ApiPurchaseController extends AbstractController
         $payload = $request->getPayload()->all();
 
         try {
-            $dto = $serializer->denormalize($payload, PurchaseRequest::class);
+            $dto = $serializer->denormalize($payload, PurchaseRequestDto::class);
         } catch (\Exception) {
             return $this->json(['error' => 'Bad request'], 400);
         }
@@ -61,10 +70,10 @@ class ApiPurchaseController extends AbstractController
             return $this->json(['error' => $errors], 400);
         }
 
-        $purchase = $purchaseService->create($dto);
+        $purchase = $purchaseFactory->create($dto);
 
         if ($purchase) {
-            return $this->json($purchaseService->info($purchase));
+            return $this->json($purchaseResponseDtoFactory->create($purchase));
         }
 
         return $this->json(['error' => 'Bad request'], 400);

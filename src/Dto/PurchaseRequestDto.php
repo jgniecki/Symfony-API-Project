@@ -12,12 +12,16 @@ namespace App\Dto;
 use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PurchaseResponse
+class PurchaseRequestDto
 {
     public function __construct(
         #[Assert\NotBlank]
-        #[Assert\Type('integer')]
-        public readonly int $id,
+        #[Assert\Type('string')]
+        public readonly string $name,
+
+        #[Assert\NotBlank]
+        #[Assert\Email]
+        public readonly string $email,
 
         #[Assert\Type('array')]
         #[Assert\Count(['min' => 1])]
@@ -34,11 +38,8 @@ class PurchaseResponse
                         new Assert\Positive(),
                         new Assert\Type('integer'),
                     ],
-                    'unitPrice' => [
-                        new Assert\NotBlank(),
-                        new Assert\Type('string'),
-                    ],
-            ]),
+                ]
+            ),
         ])]
         #[ApiProperty(
             openapiContext: [
@@ -51,10 +52,7 @@ class PurchaseResponse
                         ],
                         'quantity' => [
                             'type' => 'integer',
-                        ],
-                        'unitPrice' => [
-                            'type' => 'string',
-                        ],
+                        ]
                     ],
                 ],
             ]

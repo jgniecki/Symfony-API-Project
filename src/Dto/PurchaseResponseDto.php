@@ -12,7 +12,7 @@ namespace App\Dto;
 use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PurchaseDetailsResponse
+class PurchaseResponseDto
 {
     public function __construct(
         #[Assert\NotBlank]
@@ -21,6 +21,7 @@ class PurchaseDetailsResponse
 
         #[Assert\Type('array')]
         #[Assert\Count(['min' => 1])]
+        #[Assert\Valid]
         #[Assert\All([
             new Assert\Collection(
                 fields: [
@@ -37,8 +38,7 @@ class PurchaseDetailsResponse
                         new Assert\NotBlank(),
                         new Assert\Type('string'),
                     ],
-                ]
-            ),
+            ]),
         ])]
         #[ApiProperty(
             openapiContext: [
@@ -60,46 +60,6 @@ class PurchaseDetailsResponse
             ]
         )]
         public readonly array $items,
-
-        #[Assert\NotBlank]
-        #[Assert\Valid]
-        #[Assert\Collection(
-            fields: [
-                'price' => [
-                    new Assert\NotBlank(),
-                    new Assert\NotNull(),
-                    new Assert\Type('string')
-
-                ],
-                'vat' => [
-                    new Assert\NotBlank(),
-                    new Assert\NotNull(),
-                    new Assert\Type('string')
-                ],
-                'quantity' => [
-                    new Assert\Type('integer'),
-                    new Assert\Positive(),
-                    new Assert\NotBlank()
-                ]
-            ],
-        )]
-        #[ApiProperty(
-            openapiContext: [
-                'type' => 'object',
-                'properties' => [
-                    'price' => [
-                        'type' => 'string',
-                    ],
-                    'vat' => [
-                        'type' => 'string',
-                    ],
-                    'quantity' => [
-                        'type' => 'integer',
-                    ],
-                ],
-            ]
-        )]
-        public readonly array $total,
     ) {
     }
 }

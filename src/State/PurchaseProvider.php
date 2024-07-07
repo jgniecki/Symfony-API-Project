@@ -4,30 +4,28 @@ namespace App\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Dto\PurchaseResponse;
-use App\Entity\Purchase;
+use App\Dto\PurchaseResponseDto;
+use App\Factory\PurchaseResponseDtoFactory;
 use App\Repository\PurchaseRepository;
-use App\Service\PurchaseService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PurchaseProvider implements ProviderInterface
 {
     public function __construct(
         private readonly PurchaseRepository $purchaseRepository,
-        private readonly PurchaseService $purchaseService,
+        private readonly PurchaseResponseDtoFactory $purchaseResponseDtoFactory,
     )
     {
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): PurchaseResponse
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): PurchaseResponseDto
     {
         $purchase = $this->purchaseRepository->find($uriVariables['id']);
 
-        /** @var Purchase $purchase */
         if (!$purchase) {
             throw new NotFoundHttpException('Not found purchase');
         }
 
-        return $this->purchaseService->info($purchase);
+        return $this->purchaseResponseDtoFactory->create($purchase);
     }
 }
