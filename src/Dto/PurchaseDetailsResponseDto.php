@@ -38,7 +38,7 @@ class PurchaseDetailsResponseDto
                         new Assert\Type('integer'),
                     ],
                     'unitPrice' => [
-                        new Assert\Regex('/^\d{1,6}([.]\d{1,2})?$/'),
+                        new Assert\Regex('/^(0|[1-9]\d*)\.\d{1,2}$/'),
                         new Assert\NotBlank(),
                         new Assert\Type('string'),
                     ],
@@ -74,12 +74,14 @@ class PurchaseDetailsResponseDto
         #[Assert\Collection(
             fields: [
                 'price' => [
+                    new Assert\Regex('/^(0|[1-9]\d*)\.\d{1,2}$/'),
                     new Assert\NotBlank(),
                     new Assert\NotNull(),
                     new Assert\Type('string')
 
                 ],
                 'vat' => [
+                    new Assert\Regex('/^(0|[1-9]\d*)\.\d{1,2}$/'),
                     new Assert\NotBlank(),
                     new Assert\NotNull(),
                     new Assert\Type('string')

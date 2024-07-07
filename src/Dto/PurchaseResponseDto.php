@@ -38,6 +38,7 @@ class PurchaseResponseDto
                         new Assert\Type('integer'),
                     ],
                     'unitPrice' => [
+                        new Assert\Regex('/^(0|[1-9]\d*)\.\d{1,2}$/'),
                         new Assert\NotBlank(),
                         new Assert\Type('string'),
                     ],
