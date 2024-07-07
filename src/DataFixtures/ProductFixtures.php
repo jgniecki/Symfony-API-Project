@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\DataFixtures;
 
@@ -12,9 +12,7 @@ class ProductFixtures extends Fixture
     {
         for ($i = 0; $i < 3; $i++) {
             $product = new Product();
-
             $price = number_format(mt_rand(10, 100), 2, '.', '');
-
             $product->setName('Product_' . $i);
             $product->setPrice($price);
             $product->setQuantity(10);
