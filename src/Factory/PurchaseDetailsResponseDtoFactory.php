@@ -27,9 +27,9 @@ class PurchaseDetailsResponseDtoFactory
 
         $dto = $purchaseResponseDtoFactory->create($purchase);
         $total = [
-            'quantity' => $this->purchaseCalculatorService->calculateTotalQuantity($purchase),
-            'vat' => number_format($this->purchaseCalculatorService->calculateTotalVat($purchase), 2, '.', ''),
             'price' => number_format($this->purchaseCalculatorService->calculateTotalPrice($purchase), 2, '.', ''),
+            'vat' => number_format($this->purchaseCalculatorService->calculateTotalVat($purchase), 2, '.', ''),
+            'quantity' => $this->purchaseCalculatorService->calculateTotalQuantity($purchase),
         ];
 
         return new PurchaseDetailsResponseDto($dto->id, $dto->items, $total);

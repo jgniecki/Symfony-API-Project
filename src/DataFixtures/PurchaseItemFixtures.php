@@ -17,11 +17,14 @@ class PurchaseItemFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < 3; $i++) {
             $product = $manager->getRepository(Product::class)->findOneBy(['name' => 'Product_' . $i]);
+            if ($product === null) {
+                continue;
+            }
             $purchaseItem = new PurchaseItem();
             $purchaseItem->setProduct($product);
             $purchaseItem->setQuantity(mt_rand(1, 3));
             $purchaseItem->setPurchase($purchase);
-            $purchaseItem->setUnitPrice($product->getPrice());
+            $purchaseItem->setUnitPrice((string) $product->getPrice());
             $manager->persist($purchaseItem);
         }
 

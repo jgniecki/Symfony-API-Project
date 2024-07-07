@@ -14,6 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class PurchaseRequestDto
 {
+    /**
+     * @param string $name
+     * @param string $email
+     * @param array<array{productId: int, quantity: int}> $items
+     */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('string')]
@@ -40,6 +45,7 @@ class PurchaseRequestDto
             ),
         ])]
         #[ApiProperty(
+            required: true,
             openapiContext: [
                 'type' => 'array',
                 'items' => [
@@ -47,9 +53,14 @@ class PurchaseRequestDto
                     'properties' => [
                         'productId' => [
                             'type' => 'integer',
+                            'example' => 1,
+                            'required' => true,
                         ],
                         'quantity' => [
                             'type' => 'integer',
+                            'example' => 1,
+                            'required' => true,
+                            'description' => 'The minimum value must be `> 0`'
                         ]
                     ],
                 ],

@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -32,8 +34,6 @@ class ApiPurchaseController extends AbstractController
     #[Route('/{id}/details', name: 'details', methods: ['GET'])]
     public function detailsPurchase(?Purchase $purchase, PurchaseDetailsResponseDtoFactory $purchaseDetailsResponseDtoFactory): JsonResponse
     {
-        $purchaseDetailsResponseDtoFactory->create($purchase);
-
         if (!$purchase) {
             return $this->json(['error' => 'Not found purchase'], 404);
         }
@@ -44,7 +44,7 @@ class ApiPurchaseController extends AbstractController
     #[Route('', name: 'create', methods: ['POST'])]
     public function createPurchase(
         Request                    $request,
-        SerializerInterface        $serializer,
+        DenormalizerInterface      $serializer,
         ValidatorInterface         $validator,
         PurchaseFactory            $purchaseFactory,
         PurchaseResponseDtoFactory $purchaseResponseDtoFactory
@@ -58,6 +58,10 @@ class ApiPurchaseController extends AbstractController
         try {
             $dto = $serializer->denormalize($payload, PurchaseRequestDto::class);
         } catch (Exception) {
+            return $this->json(['error' => 'Bad request'], 400);
+        }
+
+        if (!$dto instanceof PurchaseRequestDto) {
             return $this->json(['error' => 'Bad request'], 400);
         }
 

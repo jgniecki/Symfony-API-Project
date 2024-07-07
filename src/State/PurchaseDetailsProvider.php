@@ -9,6 +9,9 @@ use App\Factory\PurchaseDetailsResponseDtoFactory;
 use App\Repository\PurchaseRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @implements ProviderInterface<PurchaseDetailsResponseDto>
+ */
 class PurchaseDetailsProvider implements ProviderInterface
 {
     public function __construct(

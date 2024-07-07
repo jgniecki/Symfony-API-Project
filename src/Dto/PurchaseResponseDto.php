@@ -14,6 +14,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class PurchaseResponseDto
 {
+    /**
+     * @param int $id
+     * @param array<array{productId: int, quantity: int, unitPrice: numeric-string}> $items
+     */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('integer')]
@@ -41,6 +45,7 @@ class PurchaseResponseDto
             ),
         ])]
         #[ApiProperty(
+            required: true,
             openapiContext: [
                 'type' => 'array',
                 'items' => [
@@ -48,12 +53,15 @@ class PurchaseResponseDto
                     'properties' => [
                         'productId' => [
                             'type' => 'integer',
+                            'example' => 1,
                         ],
                         'quantity' => [
                             'type' => 'integer',
+                            'example' => 1,
                         ],
                         'unitPrice' => [
                             'type' => 'string',
+                            'example' => "1.00",
                         ],
                     ],
                 ],

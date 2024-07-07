@@ -19,6 +19,9 @@ class VatCalculatorCollector
      */
     private array $vatCalculators;
 
+    /**
+     * @param VatCalculatorInterface[] $vatCalculator
+     */
     public function __construct(iterable $vatCalculator)
     {
         foreach ($vatCalculator as $item) {

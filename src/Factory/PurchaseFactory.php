@@ -50,7 +50,7 @@ class PurchaseFactory
                 $purchaseItem = new PurchaseItem();
                 $purchaseItem->setProduct($product);
                 $purchaseItem->setQuantity($quantity);
-                $purchaseItem->setUnitPrice($product->getPrice());
+                $purchaseItem->setUnitPrice((string) $product->getPrice());
                 $purchase->addPurchaseItem($purchaseItem);
 
                 $this->entityManager->persist($purchaseItem);

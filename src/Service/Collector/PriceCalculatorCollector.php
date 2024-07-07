@@ -20,6 +20,9 @@ class PriceCalculatorCollector
      */
     private array $priceCalculators;
 
+    /**
+     * @param PriceCalculatorInterface[] $priceCalculator
+     */
     public function __construct(iterable $priceCalculator)
     {
         foreach ($priceCalculator as $item) {

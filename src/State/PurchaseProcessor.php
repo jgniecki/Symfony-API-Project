@@ -4,11 +4,15 @@ namespace App\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\Dto\PurchaseRequestDto;
 use App\Dto\PurchaseResponseDto;
 use App\Factory\PurchaseFactory;
 use App\Factory\PurchaseResponseDtoFactory;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @implements ProcessorInterface<PurchaseRequestDto, PurchaseResponseDto>
+ */
 class PurchaseProcessor implements ProcessorInterface
 {
     public function __construct(

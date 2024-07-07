@@ -14,6 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class PurchaseDetailsResponseDto
 {
+    /**
+     * @param int $id
+     * @param array<array{productId: int, quantity: int, unitPrice: numeric-string}> $items
+     * @param array{price: numeric-string, vat: numeric-string, quantity: int} $total
+     */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('integer')]
@@ -33,6 +38,7 @@ class PurchaseDetailsResponseDto
                         new Assert\Type('integer'),
                     ],
                     'unitPrice' => [
+                        new Assert\Regex('/^\d{1,6}([.]\d{1,2})?$/'),
                         new Assert\NotBlank(),
                         new Assert\Type('string'),
                     ],
@@ -40,6 +46,7 @@ class PurchaseDetailsResponseDto
             ),
         ])]
         #[ApiProperty(
+            required: true,
             openapiContext: [
                 'type' => 'array',
                 'items' => [
@@ -47,12 +54,15 @@ class PurchaseDetailsResponseDto
                     'properties' => [
                         'productId' => [
                             'type' => 'integer',
+                            'example' => 1,
                         ],
                         'quantity' => [
                             'type' => 'integer',
+                            'example' => 2,
                         ],
                         'unitPrice' => [
                             'type' => 'string',
+                            'example' => "1.00",
                         ],
                     ],
                 ],
@@ -82,17 +92,21 @@ class PurchaseDetailsResponseDto
             ],
         )]
         #[ApiProperty(
+            required: true,
             openapiContext: [
                 'type' => 'object',
                 'properties' => [
                     'price' => [
                         'type' => 'string',
+                        'example' => '2.00'
                     ],
                     'vat' => [
                         'type' => 'string',
+                        'example' => '0.46'
                     ],
                     'quantity' => [
                         'type' => 'integer',
+                        'example' => 2
                     ],
                 ],
             ]
