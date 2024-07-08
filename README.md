@@ -14,8 +14,31 @@ oba API przyjmują te same dane, tak samo zwracają dane i zachowują sie podobn
 Schematy dla requestów i response można sprawdzić pod adresem:
 http://localhost/api/docs?ui=re_doc
 
-## Schematy
+Wykorzystane narzędzia:
+`PhpStorm`, `Docker`, `Postman`, `PHP CS Fixer`, `PHPStan`, `PHPUnit`, `API Platform`
 
+## Instalacja
+
+Należy utworzyć obraz z pliku ```docker-compose.yaml```
+
+Instalacja
+```
+composer install
+```
+
+Tworzenie bazy danych
+```
+php bin/console doctrine:database:create
+php bin/console doctrine:database:create --env=test
+php bin/console doctrine:migrations:migrate
+```
+
+Ładowanie testowych danych
+```
+php bin/console doctrine:fixtures:load
+```
+
+## Schematy
 
 ### `POST  /api/{version}/purchase`
 ### Request:
