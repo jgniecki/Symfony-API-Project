@@ -12,6 +12,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -23,7 +26,7 @@ class ApiPurchaseController extends AbstractController
     public function infoPurchase(?Purchase $purchase, PurchaseResponseDtoFactory $purchaseResponseDtoFactory): JsonResponse
     {
         if (!$purchase) {
-            return $this->json(['error' => 'Not found purchase'], 404);
+            throw new NotFoundHttpException('Not found purchase');
         }
 
         return $this->json($purchaseResponseDtoFactory->create($purchase));
@@ -33,7 +36,7 @@ class ApiPurchaseController extends AbstractController
     public function detailsPurchase(?Purchase $purchase, PurchaseDetailsResponseDtoFactory $purchaseDetailsResponseDtoFactory): JsonResponse
     {
         if (!$purchase) {
-            return $this->json(['error' => 'Not found purchase'], 404);
+            throw new NotFoundHttpException('Not found purchase');
         }
 
         return $this->json($purchaseDetailsResponseDtoFactory->create($purchase));
@@ -48,7 +51,7 @@ class ApiPurchaseController extends AbstractController
         PurchaseResponseDtoFactory $purchaseResponseDtoFactory
     ): Response {
         if ($request->getContentTypeFormat() != "json") {
-            return $this->json(['error' => 'Unsupported media type'], 415);
+            throw new UnsupportedMediaTypeHttpException('Unsupported media type');
         }
 
         $payload = $request->getPayload()->all();
@@ -56,20 +59,16 @@ class ApiPurchaseController extends AbstractController
         try {
             $dto = $serializer->denormalize($payload, PurchaseRequestDto::class);
         } catch (Exception) {
-            return $this->json(['error' => 'Bad request'], 400);
+            throw new BadRequestHttpException('Bad request');
         }
 
         if (!$dto instanceof PurchaseRequestDto) {
-            return $this->json(['error' => 'Bad request'], 400);
+            throw new BadRequestHttpException('Bad request');
         }
 
         $violations = $validator->validate($dto);
         if (count($violations) > 0) {
-            $errors = [];
-            foreach ($violations as $violation) {
-                $errors[] = $violation->getMessage();
-            }
-            return $this->json(['error' => $errors], 400);
+            throw new BadRequestHttpException('Bad request');
         }
 
         $purchase = $purchaseFactory->create($dto);
@@ -78,6 +77,6 @@ class ApiPurchaseController extends AbstractController
             return $this->json($purchaseResponseDtoFactory->create($purchase));
         }
 
-        return $this->json(['error' => 'Bad request'], 400);
+        throw new BadRequestHttpException('Failed to create purchase');
     }
 }
