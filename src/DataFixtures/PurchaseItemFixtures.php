@@ -24,7 +24,7 @@ class PurchaseItemFixtures extends Fixture implements DependentFixtureInterface
             $purchaseItem->setProduct($product);
             $purchaseItem->setQuantity(mt_rand(1, 3));
             $purchaseItem->setPurchase($purchase);
-            $purchaseItem->setUnitPrice((string) $product->getPrice());
+            $purchaseItem->setUnitPrice((string)$product->getPrice());
             $manager->persist($purchaseItem);
         }
 

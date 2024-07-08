@@ -17,11 +17,11 @@ class PurchaseResponseDtoFactory
     public function create(Purchase $purchase): PurchaseResponseDto
     {
         return new PurchaseResponseDto(
-            id: (int) $purchase->getId(),
+            id: (int)$purchase->getId(),
             items: array_map(function ($item) {
                 return [
-                    'productId' => (int) $item->getProduct()->getId(),
-                    'quantity' => (int) $item->getQuantity(),
+                    'productId' => (int)$item->getProduct()->getId(),
+                    'quantity' => (int)$item->getQuantity(),
                     'unitPrice' => $item->getUnitPrice(),
                 ];
             }, $purchase->getPurchaseItems()->toArray())
