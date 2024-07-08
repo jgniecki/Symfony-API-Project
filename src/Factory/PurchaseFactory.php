@@ -17,6 +17,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PurchaseFactory
 {
@@ -39,18 +40,18 @@ class PurchaseFactory
             foreach ($dto->items as $item) {
                 $product = $this->entityManager->getRepository(Product::class)->find($item['productId'], LockMode::OPTIMISTIC);
                 if (!$product) {
-                    throw new Exception('Product not found');
+                    throw new HttpException(400, 'Product not found');
                 }
 
                 $quantity = $item['quantity'];
                 if ($product->getQuantity() < $quantity) {
-                    throw new Exception('Not enough product quantity available.');
+                    throw new HttpException(400, 'Not enough product quantity available.');
                 }
 
                 $purchaseItem = new PurchaseItem();
                 $purchaseItem->setProduct($product);
                 $purchaseItem->setQuantity($quantity);
-                $purchaseItem->setUnitPrice((string) $product->getPrice());
+                $purchaseItem->setUnitPrice((string)$product->getPrice());
                 $purchase->addPurchaseItem($purchaseItem);
 
                 $this->entityManager->persist($purchaseItem);
