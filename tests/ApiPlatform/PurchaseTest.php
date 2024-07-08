@@ -15,6 +15,7 @@ use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
 class PurchaseTest extends ApiTestCase
@@ -148,16 +149,16 @@ class PurchaseTest extends ApiTestCase
         $this->assertResponseStatusCodeSame(415);
     }
 
-    //todo popraw test
-    //    public function testCreateInvalidBody(): void
-    //    {
-    //        $response = static::createClient()->request('POST', '/api/v1/purchase', [
-    //            'headers' => ['Accept' => 'application/json'],
-    //            'json' => []
-    //        ]);
-    //        $this->assertResponseStatusCodeSame(400);
-    //        $this->assertJsonContains(['error' => 'Bad request']);
-    //    }
+    public function testCreateInvalidBody(): void
+    {
+        $this->expectException(BadRequestHttpException::class);
+        $response = static::createClient()->request('POST', '/api/v1/purchase', [
+            'headers' => ['Accept' => 'application/json'],
+            'json' => []
+        ]);
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertJsonContains(['error' => 'Bad request']);
+    }
 
     public function testCreateInvalidProduct(): void
     {
