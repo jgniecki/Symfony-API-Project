@@ -47,7 +47,7 @@ Tworzy nowe zamówienie
 ### Request:
 header
 ```
-Accept: application/json
+Content-type: application/json
 Authorization: Bearer test_apiToken
 ```
 body
