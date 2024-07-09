@@ -1,3 +1,5 @@
+## Wprowadzenie
+
 Napisałem API w dwóch wersjach:
 - `v1` - z wykorzystaniem API Platform
 - `v2` - z użyciem kontrolera
@@ -38,7 +40,7 @@ php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load
 ```
 
-## Schematy
+## Endpoints
 
 ### `POST  /api/{version}/purchase`
 ### Request:
