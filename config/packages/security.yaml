@@ -2,14 +2,21 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            lazy: true
-            provider: users_in_memory
+            pattern: ^/api
+            stateless: true
+            access_token:
+                token_handler: App\Security\AccessTokenHandler
+
 
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }

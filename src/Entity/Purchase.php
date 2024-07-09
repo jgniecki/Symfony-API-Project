@@ -36,9 +36,10 @@ use Doctrine\ORM\Mapping as ORM;
             uriTemplate: 'v1/purchase',
             formats: ['json'],
             status: 200,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             input: PurchaseRequestDto::class,
             output: PurchaseResponseDto::class,
-            processor: PurchaseProcessor::class,
+            processor: PurchaseProcessor::class
         ),
     ],
     formats: ['json']

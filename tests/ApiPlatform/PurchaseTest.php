@@ -6,6 +6,7 @@ use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\DataFixtures\ProductFixtures;
 use App\DataFixtures\PurchaseFixtures;
 use App\DataFixtures\PurchaseItemFixtures;
+use App\DataFixtures\UserFixtures;
 use App\Entity\Product;
 use App\Entity\Purchase;
 use App\Kernel;
@@ -115,7 +116,10 @@ class PurchaseTest extends ApiTestCase
         $client = static::createClient();
 
         $response = $client->request('POST', '/api/v1/purchase', [
-            'headers' => ['Accept' => 'application/json'],
+            'headers' => [
+                'Authorization' => 'Bearer test_apiToken',
+                'Accept' => 'application/json'
+            ],
             'json' => [
                 'email' => 'test@mail.com',
                 'name' => 'Test Name',
@@ -144,7 +148,11 @@ class PurchaseTest extends ApiTestCase
 
     public function testCreateInvalidContentType(): void
     {
-        $response = static::createClient()->request('POST', '/api/v1/purchase');
+        $response = static::createClient()->request('POST', '/api/v1/purchase', [
+            'headers' => [
+                'Authorization' => 'Bearer test_apiToken'
+            ],
+        ]);
 
         $this->assertResponseStatusCodeSame(415);
     }
@@ -153,7 +161,10 @@ class PurchaseTest extends ApiTestCase
     {
         $this->expectException(BadRequestHttpException::class);
         $response = static::createClient()->request('POST', '/api/v1/purchase', [
-            'headers' => ['Accept' => 'application/json'],
+            'headers' => [
+                'Authorization' => 'Bearer test_apiToken',
+                'Accept' => 'application/json'
+            ],
             'json' => []
         ]);
         $this->assertResponseStatusCodeSame(400);
@@ -163,7 +174,10 @@ class PurchaseTest extends ApiTestCase
     public function testCreateInvalidProduct(): void
     {
         $response = static::createClient()->request('POST', '/api/v1/purchase', [
-            'headers' => ['Accept' => 'application/json'],
+            'headers' => [
+                'Authorization' => 'Bearer test_apiToken',
+                'Accept' => 'application/json'
+            ],
             'json' => [
                 'email' => 'test@mail.com',
                 'name' => 'Test Name',
@@ -175,7 +189,7 @@ class PurchaseTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(422);
         $this->assertResponseHeaderSame('content-type', 'application/json');
-        $this->assertJsonContains(['error' => 'Failed to create purchase']);
+        $this->assertJsonContains(['error' => 'Product not found']);
     }
 
     public function testCreateTooSmallQuantityProduct(): void
@@ -190,7 +204,10 @@ class PurchaseTest extends ApiTestCase
         $entityManager->flush();
 
         $response = static::createClient()->request('POST', '/api/v1/purchase', [
-            'headers' => ['Accept' => 'application/json'],
+            'headers' => [
+                'Authorization' => 'Bearer test_apiToken',
+                'Accept' => 'application/json'
+            ],
             'json' => [
                 'email' => 'test@mail.com',
                 'name' => 'Test Name',
@@ -205,7 +222,54 @@ class PurchaseTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(422);
         $this->assertResponseHeaderSame('content-type', 'application/json');
-        $this->assertJsonContains(['error' => 'Failed to create purchase']);
+        $this->assertJsonContains(['error' => 'Not enough product quantity available']);
+    }
+
+    public function testCreateNotApiToken(): void
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        /** @var Product[] $products */
+        $products = $entityManager->getRepository(Product::class)->findAll();
+
+        $product = $products[0];
+        $product->setQuantity(0);
+        $entityManager->flush();
+
+        $response = static::createClient()->request('POST', '/api/v2/purchase', [
+            'headers' => [
+                'Accept' => 'application/json'
+            ],
+            'json' => []
+        ]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['error' => 'Full authentication is required to access this resource.']);
+    }
+
+    public function testCreateInvalidApiToken(): void
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        /** @var Product[] $products */
+        $products = $entityManager->getRepository(Product::class)->findAll();
+
+        $product = $products[0];
+        $product->setQuantity(0);
+        $entityManager->flush();
+
+        $response = static::createClient()->request('POST', '/api/v2/purchase', [
+            'headers' => [
+                'Authorization' => 'Bearer token',
+                'Accept' => 'application/json'
+            ],
+            'json' => []
+        ]);
+
+        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonContains(['error' => 'Invalid Api Token']);
     }
 
     protected function setUp(): void
@@ -214,6 +278,7 @@ class PurchaseTest extends ApiTestCase
         /** @var EntityManager $entityManager */
         $entityManager = $this->getContainer()->get(EntityManagerInterface::class);
         $loader = new Loader();
+        $loader->addFixture(new UserFixtures());
         $loader->addFixture(new ProductFixtures());
         $loader->addFixture(new PurchaseFixtures());
         $loader->addFixture(new PurchaseItemFixtures());

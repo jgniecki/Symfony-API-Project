@@ -43,9 +43,14 @@ php bin/console doctrine:fixtures:load
 ## Endpoints
 
 ### `POST  /api/{version}/purchase`
+Tworzy nowe zamówienie
 ### Request:
-`Content-type: application/json`
-
+header
+```
+Accept: application/json
+Authorization: Bearer test_apiToken
+```
+body
 ```json
 {
   "name": "string",
@@ -58,7 +63,6 @@ php bin/console doctrine:fixtures:load
   ]
 }
 ```
-Dodam jeszcze, żeby utworzenie encji Purchase się powiodło musi być wystarczająca wartość quantity w encji Product względem zamówienia.
 
 ---
 
@@ -87,6 +91,17 @@ Dodam jeszcze, żeby utworzenie encji Purchase się powiodło musi być wystarcz
 ```
 Odpowiedź zwracana w przypadku błędnego zapytania, może to być np. ujemna wartość dla quantity
 
+`Content-type: application/json` `401`
+
+```json
+{
+  "error": "Invalid Api Token"
+//  "error": "Full authentication is required to access this resource."
+}
+```
+
+Odpowiedź zwracana w przypadku podania nieprawidłowego ApiTokenu bądź gdy nie podano go wcale
+
 `Content-type: application/json` `415`
 
 ```json
@@ -101,6 +116,8 @@ Odpowiedź zwracana w przypadku użycia innej wartości niż `application/json` 
 ```json
 {
   "error": "Failed to create purchase"
+//  "error": "Not found product"
+//  "error": "Not enough product quantity available"
 }
 ```
 Odpowiedź zwracana w przypadku podania błędnego id produktu, gdy wartość quantity w encji produktu
@@ -110,7 +127,7 @@ jest niewystarczająca, w przypadku problemów ze spójnością danych w bazie.
 ---
 
 ### `GET  /api/{version}/purchase/{id}`
-
+Zwraca informacje o zamówieniu
 ### Response:
 `Content-type: application/json` `200`
 
@@ -138,7 +155,7 @@ jest niewystarczająca, w przypadku problemów ze spójnością danych w bazie.
 ---
 
 ### `GET  /api/{version}/purchase/{id}/details`
-
+Zwraca informacje o zamówieniu wraz z informacją o cenie całkowitej, VAT i sumie przedmiotów
 ### Response:
 `Content-type: application/json` `200`
 

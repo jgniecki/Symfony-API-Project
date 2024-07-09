@@ -17,6 +17,8 @@ use DateTimeImmutable;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class PurchaseFactory
 {
@@ -39,12 +41,12 @@ class PurchaseFactory
             foreach ($dto->items as $item) {
                 $product = $this->entityManager->getRepository(Product::class)->find($item['productId'], LockMode::OPTIMISTIC);
                 if (!$product) {
-                    throw new Exception('Product not found');
+                    throw new HttpException(422, 'Product not found');
                 }
 
                 $quantity = $item['quantity'];
                 if ($product->getQuantity() < $quantity) {
-                    throw new Exception('Not enough product quantity available.');
+                    throw new HttpException(422,'Not enough product quantity available');
                 }
 
                 $purchaseItem = new PurchaseItem();
@@ -52,7 +54,6 @@ class PurchaseFactory
                 $purchaseItem->setQuantity($quantity);
                 $purchaseItem->setUnitPrice((string)$product->getPrice());
                 $purchase->addPurchaseItem($purchaseItem);
-
                 $this->entityManager->persist($purchaseItem);
                 $product->setQuantity($product->getQuantity() - $quantity);
             }
@@ -60,6 +61,9 @@ class PurchaseFactory
             $this->entityManager->flush();
             $this->entityManager->commit();
             return $purchase;
+        } catch (HttpExceptionInterface $e) {
+            $this->entityManager->rollback();
+            throw new HttpException($e->getStatusCode(), $e->getMessage());
         } catch (Exception $e) {
             $this->entityManager->rollback();
             return null;
