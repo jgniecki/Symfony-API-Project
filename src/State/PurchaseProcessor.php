@@ -21,13 +21,6 @@ class PurchaseProcessor implements ProcessorInterface
     ) {
     }
 
-    /**
-     * @param PurchaseRequestDto $data
-     * @param Operation $operation
-     * @param array $uriVariables
-     * @param array $context
-     * @return PurchaseResponseDto
-     */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): PurchaseResponseDto
     {
         $purchase = $this->purchaseFactory->create($data);
