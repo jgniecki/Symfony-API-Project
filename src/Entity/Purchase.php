@@ -36,6 +36,19 @@ use Doctrine\ORM\Mapping as ORM;
             uriTemplate: 'v1/purchase',
             formats: ['json'],
             status: 200,
+            openapiContext: [
+                'parameters' => [
+                    [
+                        'name' => 'Authorization',
+                        'in' => 'header',
+                        'required' => true,
+                        'schema' => [
+                            'type' => 'string',
+                            'example' => 'Bearer test_apiToken'
+                        ],
+                    ]
+                ]
+            ],
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             input: PurchaseRequestDto::class,
             output: PurchaseResponseDto::class,
