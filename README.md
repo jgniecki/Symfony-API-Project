@@ -14,7 +14,7 @@ API posiada 3 endpointy:
 oba API przyjmują te same dane, tak samo zwracają dane i zachowują sie podobnie jeżeli chodzi o efekt końcowy
 
 Schematy dla requestów i response można sprawdzić pod adresem:
-http://localhost/api/docs?ui=re_doc
+http://localhost:8080/api/docs?ui=re_doc
 
 Wykorzystane narzędzia:
 `PhpStorm`, `Docker`, `Postman`, `PHP CS Fixer`, `PHPStan`, `PHPUnit`, `API Platform`
