@@ -58,8 +58,10 @@ php bin/console doctrine:fixtures:load
 ```
 Dodam jeszcze, żeby utworzenie encji Purchase się powiodło musi być wystarczająca wartość quantity w encji Product względem zamówienia.
 
+---
+
 ### Response:
-`Content-type: application/json`
+`Content-type: application/json` `200`
 
 ```json
 {
@@ -74,11 +76,41 @@ Dodam jeszcze, żeby utworzenie encji Purchase się powiodło musi być wystarcz
 }
 ```
 
+`Content-type: application/json` `400`
+
+```json
+{
+  "error": "Bad request"
+}
+```
+Odpowiedź zwracana w przypadku błędnego zapytania, może to być np. ujemna wartość dla quantity
+
+`Content-type: application/json` `415`
+
+```json
+{
+  "error": "Unsupported media type"
+}
+```
+Odpowiedź zwracana w przypadku użycia innej wartości niż `application/json` dla parametru `Accept`
+
+`Content-type: application/json` `422`
+
+```json
+{
+  "error": "Failed to create purchase"
+}
+```
+Odpowiedź zwracana w przypadku podania błędnego id produktu, gdy wartość quantity w encji produktu
+jest niewystarczająca, w przypadku problemów ze spójnością danych w bazie.
+
+
+---
 
 ### `GET  /api/{version}/purchase/{id}`
 
 ### Response:
-`Content-type: application/json`
+`Content-type: application/json` `200`
 
 ```json
 {
@@ -93,11 +125,20 @@ Dodam jeszcze, żeby utworzenie encji Purchase się powiodło musi być wystarcz
 }
 ```
 
+`Content-type: application/json` `404`
+
+```json
+{
+  "error": "Not found purchase"
+}
+```
+
+---
 
 ### `GET  /api/{version}/purchase/{id}/details`
 
 ### Response:
-`Content-type: application/json`
+`Content-type: application/json` `200`
 
 ```json
 {
@@ -114,5 +155,13 @@ Dodam jeszcze, żeby utworzenie encji Purchase się powiodło musi być wystarcz
     "vat": "0.46",
     "quantity": 2
   }
+}
+```
+
+`Content-type: application/json` `404`
+
+```json
+{
+  "error": "Not found purchase"
 }
 ```

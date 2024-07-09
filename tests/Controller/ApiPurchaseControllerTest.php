@@ -152,7 +152,7 @@ class ApiPurchaseControllerTest extends ApiTestCase
             ]
         ]]);
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(422);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['error' => 'Failed to create purchase']);
     }
@@ -179,7 +179,7 @@ class ApiPurchaseControllerTest extends ApiTestCase
             }, $products),
         ]]);
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(422);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['error' => 'Failed to create purchase']);
     }
