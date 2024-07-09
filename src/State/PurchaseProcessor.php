@@ -8,7 +8,7 @@ use App\Dto\PurchaseRequestDto;
 use App\Dto\PurchaseResponseDto;
 use App\Factory\PurchaseFactory;
 use App\Factory\PurchaseResponseDtoFactory;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
  * @implements ProcessorInterface<PurchaseRequestDto, PurchaseResponseDto>
@@ -33,7 +33,7 @@ class PurchaseProcessor implements ProcessorInterface
         $purchase = $this->purchaseFactory->create($data);
 
         if (!$purchase) {
-            throw new BadRequestHttpException("Failed to create purchase");
+            throw new UnprocessableEntityHttpException("Failed to create purchase");
         }
 
         return $this->purchaseResponseDtoFactory->create($purchase);

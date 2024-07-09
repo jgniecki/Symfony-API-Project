@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -77,6 +78,6 @@ class ApiPurchaseController extends AbstractController
             return $this->json($purchaseResponseDtoFactory->create($purchase));
         }
 
-        throw new BadRequestHttpException('Failed to create purchase');
+        throw new UnprocessableEntityHttpException('Failed to create purchase');
     }
 }
