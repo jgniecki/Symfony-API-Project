@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiPlatform;
+namespace App\Tests\ApiPlatform;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\DataFixtures\ProductFixtures;
