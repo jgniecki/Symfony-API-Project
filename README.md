@@ -109,7 +109,7 @@ Odpowiedź zwracana w przypadku podania nieprawidłowego ApiTokenu bądź gdy ni
   "error": "Unsupported media type"
 }
 ```
-Odpowiedź zwracana w przypadku użycia innej wartości niż `application/json` dla parametru `Accept`
+Odpowiedź zwracana w przypadku użycia innej wartości niż `application/json` dla parametru `Content-type`
 
 `Content-type: application/json` `422`
 
