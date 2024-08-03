@@ -74,7 +74,7 @@ class ApiPurchaseController extends AbstractController
             throw new BadRequestHttpException('Bad request');
         }
 
-        $purchase = $purchaseFactory->create($dto);
+        $purchase = $purchaseFactory->create($dto, $this->getUser());
 
         if ($purchase) {
             return $this->json($purchaseResponseDtoFactory->create($purchase));

@@ -13,7 +13,7 @@ use App\Dto\PurchaseRequestDto;
 use App\Entity\Product;
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
-use DateTimeImmutable;
+use App\Entity\User;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -26,12 +26,12 @@ class PurchaseFactory
     {
     }
 
-    public function create(PurchaseRequestDto $dto): ?Purchase
+    public function create(PurchaseRequestDto $dto, User $user): ?Purchase
     {
         $purchase = new Purchase();
-        $purchase->setCreatedAt(new DateTimeImmutable());
         $purchase->setCustomerEmail($dto->email);
         $purchase->setCustomerName($dto->name);
+        $purchase->setUser($user);
 
         $this->entityManager->beginTransaction();
 

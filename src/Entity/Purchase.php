@@ -79,9 +79,14 @@ class Purchase
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'purchases')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->purchaseItems = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -151,6 +156,18 @@ class Purchase
     public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
