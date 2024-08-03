@@ -6,7 +6,7 @@ Napisałem API w dwóch wersjach:
 
 API posiada 3 endpointy:
 - `GET  /api/{version}/purchase/{purchaseId}`
-- `GET  /api/{version}/purchase/{purchaseId}/details` - rozwiązanie 6 zadania
+- `GET  /api/{version}/purchase/{purchaseId}/details`
 - `POST /api/{version}/purchase`
 
 `{version}` - `v1` lub `v2`
