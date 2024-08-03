@@ -15,12 +15,6 @@ class VatCalculator implements VatCalculatorInterface
 {
     public const VAT = 0.23;
 
-    /**
-     *  Drugi parametr przez charakterystyke zadania jest nie potrzebny z racji założenia, że każdy produkt ma
-     *  stały VAT, jednakże zostawiłem furtkę która umożliwia na zastosowanie różnych VATów
-     *
-     * @inheritDoc
-     */
     public function calculate(float $price, PurchaseItem $purchaseItem): float
     {
         return $price * static::VAT;

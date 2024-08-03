@@ -13,9 +13,5 @@ use App\Entity\PurchaseItem;
 
 interface PriceCalculatorInterface
 {
-    /**
-     * Drugi parametr przez charakterystyke zadania jest nie potrzebny aczkowliek mógłby zostać wykorzystany np.
-     * do obliczenia ceny w wypadku promocji
-     */
     public function calculate(float $price, PurchaseItem $purchaseItem): float;
 }

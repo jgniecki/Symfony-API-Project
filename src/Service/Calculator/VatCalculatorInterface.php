@@ -13,9 +13,5 @@ use App\Entity\PurchaseItem;
 
 interface VatCalculatorInterface
 {
-    /**
-     * Drugi parametr przez charakterystyke zadania jest nie potrzebny z racji założenia, że każdy produkt ma
-     * stały VAT, jednakże zostawiłem furtkę która umożliwia na zastosowanie różnych VATów
-     */
     public function calculate(float $price, PurchaseItem $purchaseItem): float;
 }

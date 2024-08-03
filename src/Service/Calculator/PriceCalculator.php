@@ -13,12 +13,6 @@ use App\Entity\PurchaseItem;
 
 class PriceCalculator implements PriceCalculatorInterface
 {
-    /**
-     * Drugi parametr przez charakterystyke zadania jest nie potrzebny aczkowliek mógłby zostać wykorzystany np.
-     * do obliczenia ceny w wypadku promocji
-     *
-     * @inheritDoc
-     */
     public function calculate(float $price, PurchaseItem $purchaseItem): float
     {
         return $price;
